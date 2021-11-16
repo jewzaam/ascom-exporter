@@ -15,6 +15,20 @@ REQUEST_TIME = prometheus_client.Summary('request_processing_seconds', 'Time spe
 
 METRICS_FREQUENCY_SECONDS = 2
 
+devices = {}
+
+def getDevice(driver):
+    if driver in devices:
+        device = devices[driver]
+    else:
+        device = win32com.client.Dispatch(driver)
+        devices[driver] = device
+
+        # connect to the device
+        device.Connected = True
+        print(f"INFO: connected to {driver}")
+    return device
+
 def getMetrics_Focuser(config):
     # https://ascom-standards.org/Help/Developer/html/T_ASCOM_DriverAccess_Focuser.htm
 
@@ -29,16 +43,14 @@ def getMetrics_Focuser(config):
 
         try:
             # if we cannot connect then we cannot collect metrics.
-            focuser = win32com.client.Dispatch(device['driver'])
-            if not focuser.Connected:
-                focuser.Connected = True
+            focuser = getDevice(device['driver'])
         except Exception as e:
             print(e)
             return
 
         # if focuser is not connected bail
         if not focuser.Connected:
-            print(f"FAILURE: {device.driver} not connected")
+            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         # collect all the data up front
@@ -125,16 +137,14 @@ def getMetrics_Switch(config):
 
         try:
             # if we cannot connect then we cannot collect metrics.
-            switch = win32com.client.Dispatch(device['driver'])
-            if not switch.Connected:
-                switch.Connected = True
+            switch = getDevice(device['driver'])
         except Exception as e:
             print(e)
             return
 
         # if switch is not connected bail
         if not switch.Connected:
-            print(f"FAILURE: {device.driver} not connected")
+            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         success = False
@@ -172,16 +182,14 @@ def getMetrics_Telescope(config):
 
         try:
             # if we cannot connect then we cannot collect metrics.
-            scope = win32com.client.Dispatch(device['driver'])
-            if not scope.Connected:
-                scope.Connected = True
+            scope = getDevice(device['driver'])
         except Exception as e:
             print(e)
             return
 
         # if scope is not connected bail
-        if not scope.Connected:
-            print(f"FAILURE: {device.driver} not connected")
+        if scope.Connected == False:
+            print(f"FAILURE: {device['driver']} not connected")
             continue
         
         # collect all the data up front
@@ -369,16 +377,14 @@ def getMetrics_Camera(config):
 
         try:
             # if we cannot connect then we cannot collect metrics.
-            camera = win32com.client.Dispatch(device['driver'])
-            if not camera.Connected:
-                camera.Connected = True
+            camera = getDevice(device['driver'])
         except Exception as e:
             print(e)
             return
 
         # if camera is not connected bail
         if not camera.Connected:
-            print(f"FAILURE: {device.driver} not connected")
+            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         # collect all the data up front
