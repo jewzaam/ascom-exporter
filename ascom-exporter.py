@@ -30,13 +30,14 @@ def getMetrics_Focuser(config):
         try:
             # if we cannot connect then we cannot collect metrics.
             focuser = win32com.client.Dispatch(device['driver'])
-            focuser.Connected = True
+            if not focuser.Connected:
+                focuser.Connected = True
         except Exception as e:
             print(e)
             return
 
         # if focuser is not connected bail
-        if focuser.Connected == False:
+        if not focuser.Connected:
             print(f"FAILURE: {device.driver} not connected")
             continue
 
@@ -125,13 +126,14 @@ def getMetrics_Switch(config):
         try:
             # if we cannot connect then we cannot collect metrics.
             switch = win32com.client.Dispatch(device['driver'])
-            switch.Connected = True
+            if not switch.Connected:
+                switch.Connected = True
         except Exception as e:
             print(e)
             return
 
         # if switch is not connected bail
-        if switch.Connected == False:
+        if not switch.Connected:
             print(f"FAILURE: {device.driver} not connected")
             continue
 
@@ -171,13 +173,14 @@ def getMetrics_Telescope(config):
         try:
             # if we cannot connect then we cannot collect metrics.
             scope = win32com.client.Dispatch(device['driver'])
-            scope.Connected = True
+            if not scope.Connected:
+                scope.Connected = True
         except Exception as e:
             print(e)
             return
 
         # if scope is not connected bail
-        if scope.Connected == False:
+        if not scope.Connected:
             print(f"FAILURE: {device.driver} not connected")
             continue
         
@@ -367,13 +370,14 @@ def getMetrics_Camera(config):
         try:
             # if we cannot connect then we cannot collect metrics.
             camera = win32com.client.Dispatch(device['driver'])
-            camera.Connected = True
+            if not camera.Connected:
+                camera.Connected = True
         except Exception as e:
             print(e)
             return
 
         # if camera is not connected bail
-        if camera.Connected == False:
+        if not camera.Connected:
             print(f"FAILURE: {device.driver} not connected")
             continue
 
