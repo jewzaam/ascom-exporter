@@ -117,7 +117,7 @@ def getMetrics_Switch(config):
     if 'switch' not in config:
         return
 
-    for device in config['focuser']:
+    for device in config['switch']:
         # must have a driver for the device
         if 'driver' not in device:
             continue
@@ -176,7 +176,7 @@ def getMetrics_Telescope(config):
             print(e)
             return
 
-        # if v is not connected bail
+        # if scope is not connected bail
         if scope.Connected == False:
             print(f"FAILURE: {device.driver} not connected")
             continue
@@ -372,7 +372,7 @@ def getMetrics_Camera(config):
             print(e)
             return
 
-        # if v is not connected bail
+        # if camera is not connected bail
         if camera.Connected == False:
             print(f"FAILURE: {device.driver} not connected")
             continue
