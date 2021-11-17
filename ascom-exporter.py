@@ -24,9 +24,18 @@ def getDevice(driver):
         device = win32com.client.Dispatch(driver)
         devices[driver] = device
 
-        # connect to the device
-        device.Connected = True
-        print(f"INFO: connected to {driver}")
+    # try to connect to the device
+    if not device.Connected:
+        try:
+            device.Connected = True
+            utility.inc("ascom_connect_total", {"status": "success", "driver": driver})
+            print(f"INFO: connected to {driver}")
+        except Exception as e:
+            utility.inc("ascom_connect_total", {"status": "failure", "driver": driver})
+            print(f"FAILURE: unable to connect to {driver}")
+            print(e)
+            pass
+        
     return device
 
 def getMetrics_Focuser(config):
