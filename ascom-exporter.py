@@ -29,7 +29,8 @@ def getDevice(driver):
         try:
             device.Connected = True
             utility.inc("ascom_connect_total", {"status": "success", "driver": driver})
-            print(f"INFO: connected to {driver}")
+            if device.Connected:
+                print(f"INFO: connected to {driver}")
         except Exception as e:
             utility.inc("ascom_connect_total", {"status": "failure", "driver": driver})
             print(f"FAILURE: unable to connect to {driver}")
@@ -59,7 +60,6 @@ def getMetrics_Focuser(config):
 
         # if focuser is not connected bail
         if not focuser.Connected:
-            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         # collect all the data up front
@@ -153,7 +153,6 @@ def getMetrics_Switch(config):
 
         # if switch is not connected bail
         if not switch.Connected:
-            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         success = False
@@ -198,7 +197,6 @@ def getMetrics_Telescope(config):
 
         # if scope is not connected bail
         if scope.Connected == False:
-            print(f"FAILURE: {device['driver']} not connected")
             continue
         
         # collect all the data up front
@@ -393,7 +391,6 @@ def getMetrics_Camera(config):
 
         # if camera is not connected bail
         if not camera.Connected:
-            print(f"FAILURE: {device['driver']} not connected")
             continue
 
         # collect all the data up front
